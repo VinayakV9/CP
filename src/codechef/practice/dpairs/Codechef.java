@@ -3,6 +3,8 @@ package codechef.practice.dpairs;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -21,21 +23,20 @@ class Codechef
         int m = Integer.parseInt(str[1]);
         int max = n+m-1;
         
-        Map<Long, List<Integer>> aMap = new HashMap<>();
+        
+        Map<Long, Integer> aMap = new HashMap<>();
         str = br.readLine().split(" ");
         for(int i = 0 ; i < str.length; i++) {
         	long num = Long.parseLong(str[i]);
-        	aMap.putIfAbsent(num, new LinkedList<>());
-        	aMap.get(num).add(i);
+        	aMap.put(num, i);
         }
         
 
-        Map<Long, List<Integer>> bMap = new HashMap<>();
+        Map<Long, Integer> bMap = new HashMap<>();
         str = br.readLine().split(" ");
         for(int i = 0 ; i < str.length; i++) {
         	long num = Long.parseLong(str[i]);
-        	bMap.putIfAbsent(num, new LinkedList<>());
-        	bMap.get(num).add(i);
+        	bMap.put(num, i);
         }
         
         Set<Long> aPlusBSet = new HashSet<>();
@@ -43,18 +44,24 @@ class Codechef
         List<Integer> pairA = new LinkedList<>();
         List<Integer> pairB = new ArrayList<>();
         
+        Long aList[] = new Long[aMap.size()];
+        Long bList[] = new Long[bMap.size()];
+
+        aMap.keySet().toArray(aList);
+        bMap.keySet().toArray(bList);
+        
+        Arrays.sort(aList);
+        Arrays.sort(bList, Comparator.reverseOrder());
+        
         outer:
-        for(Map.Entry<Long, List<Integer>> aEntry : aMap.entrySet()){
-            long a = aEntry.getKey();
-            List<Integer> aIndexList = aEntry.getValue();
+        for(long a : aList){
             
-            for(Map.Entry<Long, List<Integer>> bEntry : bMap.entrySet()){
-                long b = bEntry.getKey();
-                List<Integer> bIndexList = bEntry.getValue();
+            for(long b : bList){
                 if( !aPlusBSet.contains(a+b)) {
-                	pairA.add(aIndexList.get(0));
-                	pairB.add(bIndexList.get(0));
+                	pairA.add(aMap.get(a));
+                	pairB.add(bMap.get(b));
                 	
+                	aPlusBSet.add(a+b);
                 	if( pairB.size() == max){
                         break outer;
                     }
