@@ -24,58 +24,39 @@ class Codechef
         int max = n+m-1;
         
         
-        Map<Long, Integer> aMap = new HashMap<>();
+        int aMin = Integer.MAX_VALUE;
+        int aIndex = 0;
         str = br.readLine().split(" ");
         for(int i = 0 ; i < str.length; i++) {
-        	long num = Long.parseLong(str[i]);
-        	aMap.put(num, i);
+        	int num = Integer.parseInt(str[i]);
+        	if( num < aMin) {
+        		aMin = num;
+        		aIndex = i;
+        	}
         }
         
-
-        Map<Long, Integer> bMap = new HashMap<>();
+        int bMax = Integer.MIN_VALUE;
+        int bIndex = 0;
         str = br.readLine().split(" ");
         for(int i = 0 ; i < str.length; i++) {
-        	long num = Long.parseLong(str[i]);
-        	bMap.put(num, i);
+        	int num = Integer.parseInt(str[i]);
+        	if( num > bMax) {
+        		bMax = num;
+        		bIndex = i;
+        	}
+        }        
+        
+        StringBuilder result = new StringBuilder();
+        
+        for(int i = 0; i < m; i++){
+            result.append(aIndex+" "+i+"\n");
         }
-        
-        Set<Long> aPlusBSet = new HashSet<>();
-        
-        List<Integer> pairA = new LinkedList<>();
-        List<Integer> pairB = new ArrayList<>();
-        
-        Long aList[] = new Long[aMap.size()];
-        Long bList[] = new Long[bMap.size()];
 
-        aMap.keySet().toArray(aList);
-        bMap.keySet().toArray(bList);
-        
-        Arrays.sort(aList);
-        Arrays.sort(bList, Comparator.reverseOrder());
-        
-        outer:
-        for(long a : aList){
-            
-            for(long b : bList){
-                if( !aPlusBSet.contains(a+b)) {
-                	pairA.add(aMap.get(a));
-                	pairB.add(bMap.get(b));
-                	
-                	aPlusBSet.add(a+b);
-                	if( pairB.size() == max){
-                        break outer;
-                    }
-                	
-                }
-                
-            }
-            
+        for(int i = 0; i < n; i++){
+        	if( i == aIndex) continue;
+            result.append(i+" "+bIndex+"\n");
         }
         
-        int i = 0;
-        for(int x : pairA){
-            System.out.println(x +" "+pairB.get(i));
-            i++;
-        }
+        System.out.print(result.toString());
 	}
 }
