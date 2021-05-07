@@ -31,7 +31,6 @@ class TestClass {
         	Node n2 = graph.get(ir.secondInt());
         	
         	n1.addNeighbour(n2);
-        	n2.addNeighbour(n1);
         }
         
         final StringBuilder result = new StringBuilder();
