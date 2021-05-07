@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -22,22 +23,22 @@ class TestClass {
         int v = ir.firstInt();
         int e = ir.secondInt();
         
-        Map<Integer, Node> graph = Arrays.stream(ir.readIntegers())
-        	.mapToObj(Node::new)
-        	.collect(Collectors.toMap(Node::getKey, Function.identity()));
+        Map<Integer, WNode> graph = Arrays.stream(ir.readIntegers())
+        	.mapToObj(WNode::new)
+        	.collect(Collectors.toMap(WNode::getKey, Function.identity()));
         
         while(e-->0) {
-        	Node n1 = graph.get(ir.firstInt());
-        	Node n2 = graph.get(ir.secondInt());
+        	WNode n1 = graph.get(ir.firstInt());
+        	WNode n2 = graph.get(ir.secondInt());
         	
-        	n1.addNeighbour(n2);
+        	n1.addNeighbour(n2, ir.thirdInt());
         }
         
         final StringBuilder result = new StringBuilder();
         graph.values().stream()
         	.forEach(node->{
-        		String neighbours = node.neighbours.stream().map(Node::getKey)
-				.map(String::valueOf)
+        		String neighbours = node.neighbours.entrySet().stream()
+        		.map(entry-> entry.getKey().getKey()+":"+entry.getValue())
 				.collect(Collectors.joining(" "));
         		result.append(node.getKey()+" - "+neighbours+"\n");
         	});
@@ -88,8 +89,26 @@ class TestClass {
     	}
     }
     
+    private static class WNode{
+    	final int key;
+    	Map<WNode, Integer> neighbours;
+    	
+    	public WNode(int key) {
+    		this.key = key;
+    		this.neighbours = new HashMap<>();
+		}
+    	
+    	public void addNeighbour(WNode n, int weight) {
+    		neighbours.put(n, weight);
+    	}
+
+		public int getKey() {
+			return key;
+		}
+    }
+    
     private static class Node {
-    	int key;
+    	final int key;
     	Set<Node> neighbours;
     	
     	public int getKey() {
