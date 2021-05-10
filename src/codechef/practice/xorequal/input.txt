@@ -1,0 +1,10 @@
+Sample Input
+5
+1
+2
+4
+5
+100000
+Sample Output
+1
+2
